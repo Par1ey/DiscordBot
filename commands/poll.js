@@ -1,4 +1,5 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
+const { EmbedBuilder } = require('discord.js');
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -9,34 +10,31 @@ module.exports = {
         .setName('question')
         .setDescription('The question')
         .setRequired(true),
+    )
+    .addChannelOption((option) =>
+      option
+        .setName('channel')
+        .setDescription('Specify channel')
+        .setRequired(true),
     ),
 async execute(interaction) {
-    const question = interaction.options.getString('question');
-    const message = await interaction.reply({
-      embeds: [
-        new MessageEmbed()
-          .setColor('GREEN')
-          .setTitle(`Discord Poll`)
-          .setAuthor(
-            `Requested by ${interaction.member.user.tag}`,
-            interaction.member.user.avatarURL(),
-          )
-          .setDescription(question)
-          .setThumbnail(
-            'https://pngimg.com/uploads/question_mark/question_mark_PNG126.png',
-          )
-          .setTimestamp()
-          .setFooter(
-            'Bot by Iuke#4681',
-            'https://cdn.discordapp.com/emojis/912052946592739408.png?size=96',
-          ),
-      ],
-      fetchReply: true,
-    });
+    const { options } = interaction;
 
-    // you could use await to react in sequence instead of then()s
-    await message.react(':check:');
-    await message.react(':neutral:');
-    await message.react(':xmark:');
-  },
-};
+    const channel = options.getChannel('channel');
+    const question = options.getString('question');
+
+    const embed = new EmbedBuilder()
+        .setColor("Gold")
+        .setDescription(question)
+        .setTimestamp();
+
+    try {
+      const m = await channel.send({ embeds: [embed] });
+      await m.react("👍");
+      await m.react("👎");
+      await interaction.reply("Shit sent :)");
+    } catch (err){
+      console.log(err);
+    }
+  }
+}; 
