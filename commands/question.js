@@ -22,7 +22,7 @@ async execute(interaction) {
 
     const channel = options.getChannel('channel');
     const question = options.getString('question');
-
+    
     const embed = new EmbedBuilder()
         .setColor("Gold")
         .setDescription(question)
