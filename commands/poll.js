@@ -1,11 +1,11 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const { EmbedBuilder } = require('discord.js');
-const { counter } = require('../functions/questioncounter');
+const Counter  = require('../functions/questioncounter');
 
 module.exports = {
   data: new SlashCommandBuilder()
     .setName('poll')
-    .setDescription('Create a quick multiple question poll.')
+    .setDescription('Create a poll with up to five questions.')
     .addChannelOption((option) =>
       option
         .setName('channel')
@@ -42,29 +42,14 @@ module.exports = {
 async execute(interaction) {
     const { options } = interaction;
 
-    const pollreactions = { // For Multiple Choices
-        1: '🇦',
-        2: '🇧',
-        3: '🇨',
-        4: '🇩',
-        5: '🇪',
-        6: '🇫',
-        7: '🇬',
-        8: '🇭',
-        9: '🇮',
-        10: '🇯',
-        11: '🇰',
-        12: '🇱',
-        13: '🇲',
-        14: '🇳',
-        15: '🇴',
-        16: '🇵',
-        17: '🇶',
-        18: '🇷',
-        19: '🇸',
-        20: '🇹',
-    }
-
+    let pollreactions = { // For Multiple Choices
+      1: '0️⃣',
+      2: '1️⃣',
+      3: '2️⃣',
+      4: '3️⃣',
+      5: '4️⃣',
+      6: '😢',
+  }
     
     const channel = options.getChannel('channel');
     const question = options.getString('question');
@@ -73,24 +58,42 @@ async execute(interaction) {
     const question4 = options.getString('question4');
     const question5 = options.getString('question5');
     
-    const x = counter(question, question2, question3, question4, question5).question();
-
-    const descriptions = [];
-    descriptions.push(question,
-         question + '\n' + question2,
-          question + '\n' + question2 + '\n' + question3,
-           question + '\n' + question2 + '\n' + question3 + '\n' + question4,
-            question + '\n' + question2 + '\n' + question3 + '\n' + question4 + '\n' + question5);
+    let counter = new Counter(question, question2, question3, question4, question5);
 
     const embed = new EmbedBuilder()
+        .setTitle('Penis')
         .setColor("Gold")
-        .setDescription(descriptions[x])
+        .setDescription(counter.question())
         .setTimestamp();
 
     try {
       const m = await channel.send({ embeds: [embed] });
-      m.react(pollreactions[x + 1]);
-      await interaction.reply("Shit sent :)");
+      if(counter.reaction() == 1){
+        await m.react(pollreactions[1]);
+        await interaction.reply("Shit sent :)");
+      } else if(counter.reaction() == 2){
+        await m.react(pollreactions[1]);
+        await m.react(pollreactions[2]);
+        await interaction.reply("Shit sent :)");
+      } else if(counter.reaction() == 3){
+        await m.react(pollreactions[1]);
+        await m.react(pollreactions[2]);
+        await m.react(pollreactions[3]);
+        await interaction.reply("Shit sent :)");
+      } else if(counter.reaction() == 4){
+        await m.react(pollreactions[1]);
+        await m.react(pollreactions[2]);
+        await m.react(pollreactions[3]);
+        await m.react(pollreactions[4]);
+        await interaction.reply("Shit sent :)");
+      } else {
+        await m.react(pollreactions[1]);
+        await m.react(pollreactions[2]);
+        await m.react(pollreactions[3]);
+        await m.react(pollreactions[4]);
+        await m.react(pollreactions[5]);
+        await interaction.reply("Shit sent :)");
+      }
     } catch (err){
       console.log(err);
     }
