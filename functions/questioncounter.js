@@ -6,14 +6,27 @@ class counter{
         this.z = z;
         this.u = u;
         this.i = i;
-
+        let amount;
     }
 
     question(){
         if(this.x != null){
-            this.y += 1;
+            amount += 1;
         }
-    return this.y;
+        if(this.y != null){
+            amount += 1;
+        }
+        if(this.z != null){
+            amount += 1;
+        }
+        if(this.u != null){
+            amount += 1;
+        }
+        if(this.i != null){
+            amount += 1;
+        }
+
+    return amount;
     }
 
 }

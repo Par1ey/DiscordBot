@@ -1,5 +1,6 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const { EmbedBuilder } = require('discord.js');
+const { counter } = require('../functions/questioncounter');
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -10,12 +11,6 @@ module.exports = {
         .setName('channel')
         .setDescription('Specify channel')
         .setRequired(true),
-    )
-    .addIntegerOption((option) =>
-    option
-      .setName('questionNumber')
-      .setDescription('Number of questions')
-      .setRequired(true),
     )
     .addStringOption((option) =>
     option
@@ -70,15 +65,15 @@ async execute(interaction) {
         20: '🇹',
     }
 
-    const x = 4;
     
     const channel = options.getChannel('channel');
-    const number = options.getNumber('questionNumber');
     const question = options.getString('question');
     const question2 = options.getString('question2');
     const question3 = options.getString('question3');
     const question4 = options.getString('question4');
     const question5 = options.getString('question5');
+    
+    const x = counter(question, question2, question3, question4, question5).question();
 
     const descriptions = [];
     descriptions.push(question,
@@ -89,7 +84,7 @@ async execute(interaction) {
 
     const embed = new EmbedBuilder()
         .setColor("Gold")
-        .setDescription(descriptions[number])
+        .setDescription(descriptions[x])
         .setTimestamp();
 
     try {
