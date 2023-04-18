@@ -1,10 +1,24 @@
 const  { googleIt } = require('google-it')
 
-function Google (query){
+class Google{
+  constructor(q){
+    this.query = q;
+  }
 
-googleIt({'only-urls': true, 'limit': 1, 'query':  query}).then(results => {
-  console.log(results.link)
-}).catch(e => {
-  // any possible errors that might have occurred (like no Internet connection)
-})
+  GoogleSearch(){
+
+    googleIt({'only-urls': true, 'limit': 1, 'query':  this.query}).then(results => {
+        results.link;
+      }).catch(e => {
+        // any possible errors that might have occurred (like no Internet connection)
+      })
+    }
 }
+
+async function test(q){
+  const search = new Google(q);
+  console.log(search);
+}
+
+test("Minesweeper Online");
+
