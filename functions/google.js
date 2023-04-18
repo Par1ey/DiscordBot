@@ -14,11 +14,3 @@ class Google{
       })
     }
 }
-
-async function test(q){
-  const search = new Google(q);
-  console.log(search);
-}
-
-test("Minesweeper Online");
-

@@ -5,7 +5,7 @@ class Append{
 
     add(game){
         let link = "test.shit"
-        global.spilListe.set(game,link);
+        /*global.spilListe.set(game,link);*/
     }
 };
 

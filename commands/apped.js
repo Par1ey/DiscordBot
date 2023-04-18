@@ -13,9 +13,6 @@ module.exports = {
         ),
     async execute(interaction)
     {
-        const gamename = option.getString('append');
-        Append.add(gamename);
-        
-        await interaction.reply(global.spilListe.get(gamename));
+        await interaction.reply("pp");
     }
 }
