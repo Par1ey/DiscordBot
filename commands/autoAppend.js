@@ -2,6 +2,8 @@ const { SlashCommandBuilder } = require('@discordjs/builders');
 const googleIt = require('google-it')
 const Append = require('../functions/add.js');
 
+
+
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('autoappend')
@@ -20,12 +22,13 @@ module.exports = {
         const map = new Map();
 
         await googleIt({'only-urls': true, 'limit': 1, 'query':  gameName})
-        .then(function(results) { 
-            console.log(results); 
-            let link = results; 
-            map.set(gameName, link); 
-            console.log(link + " " + results.link)})
+        .then(results => {
+
+            //json has an array, THEN kvp object T-T
+            let link = results[0].link
+            interaction.reply(gameName + "\n" + link)})
         .catch(e => {})
-        .then(async function() {await interaction.reply(gameName + " " +  map.get(gameName))});
+        
+        /*await interaction.reply(gameName + " " +  map.get(gameName))*/
     }
 }
