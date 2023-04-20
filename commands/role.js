@@ -42,12 +42,5 @@ module.exports = {
 
         var user = await interaction.guild.members.fetch(userID);
         user.roles.add(newRole);
-
-        /*let thanos = await interaction.client.users.fetch(userID);
-        thanos.then(member => {
-            member.roles.add(role);
-        });
-        
-        await interaction.followUp("Added role to " + thanos.nickname);*/
     }
 }
