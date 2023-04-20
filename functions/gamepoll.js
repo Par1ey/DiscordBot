@@ -1,7 +1,7 @@
 const { ActionRowBuilder, ButtonBuilder } = require('@discordjs/builders');
 const { EmbedBuilder, ButtonStyle } = require('discord.js');
 
-module.exports = class buttonpoll {
+module.exports = class gamepoll {
     constructor(x){
         this.x = x;
     }

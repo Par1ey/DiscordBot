@@ -37,7 +37,7 @@ module.exports = {
                 yesField.value = newYesCount;
 
                 interaction.reply({
-                    content: "VoteCountedReply",
+                    content: voteCountedReply,
                     ephemeral: true
                 })
                 interaction.message.edit({
@@ -50,7 +50,7 @@ module.exports = {
                 noField.value = newNoCount;
 
                 interaction.reply({
-                    content: "VoteCountedReply",
+                    content: voteCountedReply,
                     ephemeral: true
                 })
                 interaction.message.edit({
