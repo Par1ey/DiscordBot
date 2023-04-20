@@ -5,7 +5,7 @@ const Counter  = require('../functions/questioncounter');
 module.exports = {
   data: new SlashCommandBuilder()
     .setName('poll')
-    .setDescription('Create a poll with up to five questions.')
+    .setDescription('Create a poll with up to five options.')
     .addChannelOption((option) =>
       option
         .setName('channel')
@@ -13,34 +13,50 @@ module.exports = {
         .setRequired(true),
     )
     .addStringOption((option) =>
-    option
-      .setName('question')
-      .setDescription('The question')
-      .setRequired(true),
+       option
+        .setName('option')
+        .setDescription('The option')
+        .setRequired(true),
     )
     .addStringOption((option) =>
-    option
-      .setName('question2')
-      .setDescription('The question'),
+       option
+        .setName('option2')
+        .setDescription('The option')
+        .setRequired(true),
     )
     .addStringOption((option) =>
-    option
-      .setName('question3')
-      .setDescription('The question'),
+       option
+        .setName('option3')
+        .setDescription('The option'),
     )
     .addStringOption((option) =>
-    option
-      .setName('question4')
-      .setDescription('The question'),
+       option
+        .setName('option4')
+        .setDescription('The option'),
     )
     .addStringOption((option) =>
-    option
-      .setName('question5')
-      .setDescription('The question'),
+       option
+        .setName('option5')
+        .setDescription('The option'),
     )
     ,
 async execute(interaction) {
     const { options } = interaction;
+    
+    const channel = options.getChannel('channel');
+    const option = options.getString('option');
+    const option2 = options.getString('option2');
+    const option3 = options.getString('option3');
+    const option4 = options.getString('option4');
+    const option5 = options.getString('option5');
+    
+    let counter = new Counter(option, option2, option3, option4, option5);
+
+    const embed = new EmbedBuilder()
+        .setTitle('Poll')
+        .setColor("Gold")
+        .setDescription(counter.question())
+        .setTimestamp();
 
     let pollreactions = { // For Multiple Choices
       1: '0️⃣',
@@ -49,22 +65,7 @@ async execute(interaction) {
       4: '3️⃣',
       5: '4️⃣',
       6: '😢',
-  }
-    
-    const channel = options.getChannel('channel');
-    const question = options.getString('question');
-    const question2 = options.getString('question2');
-    const question3 = options.getString('question3');
-    const question4 = options.getString('question4');
-    const question5 = options.getString('question5');
-    
-    let counter = new Counter(question, question2, question3, question4, question5);
-
-    const embed = new EmbedBuilder()
-        .setTitle('Penis')
-        .setColor("Gold")
-        .setDescription(counter.question())
-        .setTimestamp();
+    }
 
     try {
       const m = await channel.send({ embeds: [embed] });
