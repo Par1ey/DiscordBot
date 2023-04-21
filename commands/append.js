@@ -25,18 +25,14 @@ module.exports = {
 
         const gameName = options.getString('name');
         const link = options.getString('link');
-        const listThing = new Append(gameName)
 
-        listThing.add();
+        await new gameListModel({
+            gameName: gameName,
+            link: link,
+            votes: 0,                       //set default votes to 0, this gets changed under the voting process
+            guildId: interaction.guildId,
+          }).save()
 
-        await interaction.reply('The game: ' + gameName + ' has been added to the bag' + '\n' + map.get(gameName));
-
-        /*const embed = new EmbedBuilder()
-        .setColor("Gold")
-        .setTitle(gameName)
-        .setDescription(link)
-        .setTimestamp();
-
-        const m = await interaction.reply({embeds: [embed] });*/
+        await interaction.reply(gameName + " has successfully been added to the voting pot")
     }
 }
