@@ -3,42 +3,8 @@ const momentTimezone = require('moment-timezone');
 const scheduledSchema = require('../functions/scheduled-schema');
 
 module.exports = {
-    init: (client) => {
-        const checkForPosts = async () => {
-          const query = {
-            date: {
-              $lte: Date.now(),
-            },
-          }
-    
-          const results = await scheduledSchema.find(query)
-    
-          for (const post of results) {
-            const { guildId, channelId, content } = post
-    
-            const guild = await client.guilds.fetch(guildId)
-            if (!guild) {
-              continue
-            }
-    
-            const channel = guild.channels.cache.get(channelId)
-            if (!channel) {
-              continue
-            }
-    
-            channel.send(content)
-          }
-    
-          await scheduledSchema.deleteMany(query)
-    
-          setTimeout(checkForPosts, 1000 * 10)
-        }
-    
-        checkForPosts()
-    },
-
     data: new SlashCommandBuilder()
-        .setName('shedule')
+        .setName('schedule')
         .setDescription('Shedule a ping in UTC time')
         .addChannelOption((option) =>
         option
@@ -73,7 +39,7 @@ module.exports = {
         .addStringOption((option) =>
         option
           .setName('hour')
-          .setDescription('Hour in the format of HH, according to am and pm')
+          .setDescription('Hour in the format of HH, according to 24 hour clock in Central European Summer Time')
           .setRequired(true),
         )
         .addStringOption((option) =>
