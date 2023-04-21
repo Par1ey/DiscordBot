@@ -11,6 +11,7 @@ const votes = {
 }
 
 const gameListSchema = new mongoose.Schema({
+  name: reqString,
   gameName: reqString,
   link: reqString,
   votes: votes,

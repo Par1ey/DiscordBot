@@ -2,6 +2,7 @@ const { SlashCommandBuilder } = require('@discordjs/builders');
 const googleIt = require('google-it')
 const Append = require('../functions/add.js');
 const gameListModel = require('../models/game-list-schema');
+const votingPot = require('./votingPot.js');
 
 
 module.exports = {
@@ -23,6 +24,7 @@ module.exports = {
         .then(async results => {
             //upload game and link to database
             await new gameListModel({
+                name: 'votingPot',
                 gameName: gameName,
                 link: results[0].link,
                 votes: 0,                       //set default votes to 0, this gets changed under the voting process

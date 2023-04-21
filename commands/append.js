@@ -2,6 +2,7 @@ const { SlashCommandBuilder } = require('@discordjs/builders');
 const { EmbedBuilder } = require('discord.js');
 const Append = require('../functions/add.js');
 const { map } = require('../functions/add.js');
+const votingPot = require('./votingPot.js');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -27,6 +28,7 @@ module.exports = {
         const link = options.getString('link');
 
         await new gameListModel({
+            name: votingPot,
             gameName: gameName,
             link: link,
             votes: 0,                       //set default votes to 0, this gets changed under the voting process
