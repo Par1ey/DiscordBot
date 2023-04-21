@@ -3,6 +3,8 @@ require('dotenv').config();
 const {REST} = require('@discordjs/rest');
 const { Routes } = require('discord-api-types/v9');
 const { Client, Intents, Collection } = require('discord.js');
+const mongoose = require('mongoose')
+const DATABASE = process.env.DATABASE;
 
 const fs = require('fs');
 const path = require('path');
@@ -40,6 +42,16 @@ client.on("ready", () => {
         .then(() => console.log('Successfully updated commands for guild ' + guildId))
         .catch(console.error);
     }
+
+    mongoose
+        .connect(process.env.DATABASE, {
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
+        })
+        .then((m) => {
+            console.log('Connected to database established')
+        })
+        .catch((err) => console.log(err))
 });
 
 client.on("interactionCreate", async interaction => {
