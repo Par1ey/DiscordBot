@@ -1,6 +1,6 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const momentTimezone = require('moment-timezone');
-const scheduledSchema = require('../functions/scheduled-schema');
+const scheduledSchema = require('../models/scheduled-schema');
 
 module.exports = {
     data: new SlashCommandBuilder()

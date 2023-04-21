@@ -8,7 +8,7 @@ const DATABASE = process.env.DATABASE;
 
 const fs = require('fs');
 const path = require('path');
-const scheduledModel = require('./functions/scheduled-schema');
+const scheduledModel = require('./models/scheduled-schema');
 
 
 const myIntents = new IntentsBitField();
