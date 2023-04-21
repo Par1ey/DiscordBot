@@ -60,7 +60,7 @@ module.exports = {
             month: parseInt(interaction.options.getString('month')) - 1,    //Month is for some reason +1 to user input
             date: parseInt(interaction.options.getString('date')),
 
-            hour: parseInt(interaction.options.getString('hour')) + 2,      //Hour is for some reason -2 to user input
+            hour: parseInt(interaction.options.getString('hour')),      //Hour is for some reason -2 to user input
             minute: parseInt(interaction.options.getString('minute')),
         }
 
@@ -68,6 +68,7 @@ module.exports = {
         console.log(targetDate);
 
           await new scheduledSchema({
+            name: 'SheduledMessage',
             date: targetDate.valueOf(),
             content: dateData.message,
             guildId: dateData.guildID,

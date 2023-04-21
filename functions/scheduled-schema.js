@@ -6,6 +6,7 @@ const reqString = {
 }
 
 const scheduledSchema = new mongoose.Schema({
+  name: reqString,
   date: {
     type: Date,
     required: true,
@@ -13,9 +14,11 @@ const scheduledSchema = new mongoose.Schema({
   content: reqString,
   guildId: reqString,
   channelId: reqString,
-})
+}, {collection: 'Scheduled-Messages'});
 
 const name = 'Scheduled-Messages'
 
-module.exports =
-  mongoose.model[name] || mongoose.model(name, scheduledSchema, name)
+module.exports = mongoose.model[name] || mongoose.model(name, scheduledSchema, name)
+
+const scheduledModel = mongoose.model[name] || mongoose.model(name, scheduledSchema, name);
+module.exports = scheduledModel;
