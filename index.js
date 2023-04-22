@@ -60,7 +60,7 @@ client.on("ready", () => {
         })
         .then((m) => {
             console.log('Connected to database established');
-            checkDB();
+            SheduledMessagesCheck();
         })
         .catch((err) => console.log(err))
 });
@@ -86,7 +86,7 @@ client.on("interactionCreate", async interaction => {
 client.login(process.env.TOKEN);
 
 //Reading for scheduled messages from mongodb
-async function checkDB(){
+async function SheduledMessagesCheck(){
     //Working interval command
     //setInterval(function () {console.log('Timeout test')}, 1000);
     setInterval(
