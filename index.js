@@ -15,6 +15,7 @@ const myIntents = new IntentsBitField();
 myIntents.add(
     GatewayIntentBits.Guilds,
     GatewayIntentBits.GuildMessages,
+    GatewayIntentBits.GuildMessageReactions,
     GatewayIntentBits.MessageContent,
     GatewayIntentBits.GuildMembers);
 
