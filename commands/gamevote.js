@@ -93,7 +93,7 @@ module.exports = {
                 }
 
                 
-            }, 1000 * delay * (result.length + 1)); 
+            }, 1000 * delay * (result.length + 1));  //After every poll is done, get the winner
 
         }
             
