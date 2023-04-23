@@ -3,20 +3,19 @@ const { ButtonInteraction } = require("discord.js");
 const votedMember = new Set();
 
 module.exports = {
-    name: "InteractionsCreate",
+    name: "InteractionCreate",
     /**
      * 
      *  @param {ButtonInteraction} interaction
      */
-
     async execute(interaction) {
         if(!interaction.isButton()) return;
 
         const splittedArray = interaction.customId.split('-');
-        if(splittedArray[0] !== "poll") return;
+        if(splittedArray[0] !== "Poll") return;
 
         if(votedMember.has(`${interaction.user.id}-${interaction.message.id}`))
-        return interaction.reply({content: "You've already voted voted", ephemeral: true});
+        return interaction.reply({content: "You've already voted", ephemeral: true});
 
         votedMember.add(`${interaction.user.id}-${interaction.message.id}`);
 
@@ -58,6 +57,7 @@ module.exports = {
                 })
 
             }
+            break;
         }
 
     }
