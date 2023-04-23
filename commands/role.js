@@ -1,5 +1,5 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
-const { GuildMember, Role } = require('discord.js');
+const { Role } = require('discord.js');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -15,12 +15,6 @@ module.exports = {
             .setName('name')
             .setDescription('Name of the role')
             .setRequired(true))
-        /*.addChannelOption((option) =>
-        option
-            .setName('channel')
-            .setDescription('Specify channel')
-            .setRequired(true),
-    )*/
     ,
     async execute(interaction)
     {

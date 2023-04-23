@@ -1,5 +1,5 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
-const { EmbedBuilder, MessageManager } = require('discord.js');
+const { EmbedBuilder } = require('discord.js');
 const gameListModel = require('../models/game-list-schema');
 
 module.exports = {
