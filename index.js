@@ -2,17 +2,29 @@ require('dotenv').config();
 
 const {REST} = require('@discordjs/rest');
 const { Routes } = require('discord-api-types/v9');
-const { Client, Collection, Partials, GatewayIntentBits } = require('discord.js');
+const { Client, Collection, Partials, GatewayIntentBits, IntentsBitField, Intents } = require('discord.js');
 const { Guilds, GuildMessages } = GatewayIntentBits;
 const { User, Message, GuildMember, ThreadMember } = Partials;
+const mongoose = require('mongoose')
+const DATABASE = process.env.DATABASE;
 
 
 const fs = require('fs');
 const path = require('path');
+const scheduledModel = require('./models/scheduled-schema');
+
+
+const myIntents = new IntentsBitField();
+myIntents.add(
+    GatewayIntentBits.Guilds,
+    GatewayIntentBits.GuildMessages,
+    GatewayIntentBits.GuildMessageReactions,
+    GatewayIntentBits.MessageContent,
+    GatewayIntentBits.GuildMembers);
 
 
 const client = new Client({
-    intents: [Guilds, GuildMessages],
+    intents: [Guilds, GuildMessages, myIntents],
     partials: [User, Message, GuildMember, ThreadMember]
 });
 
@@ -48,6 +60,17 @@ client.on("ready", () => {
         .then(() => console.log('Successfully updated commands for guild ' + guildId))
         .catch(console.error);
     }
+
+    mongoose
+        .connect(process.env.DATABASE, {
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
+        })
+        .then((m) => {
+            console.log('Connected to database established');
+            SheduledMessagesCheck();
+        })
+        .catch((err) => console.log(err))
 });
 
 client.on("interactionCreate", async interaction => {
@@ -66,5 +89,35 @@ client.on("interactionCreate", async interaction => {
         await interaction.reply({content: "There was an error executing this command"});
     }
 });
+    
 
 client.login(process.env.TOKEN);
+
+//Reading for scheduled messages from mongodb
+async function SheduledMessagesCheck(){
+    //Working interval command
+    //setInterval(function () {console.log('Timeout test')}, 1000);
+    setInterval(
+    async () => { 
+        const result = await scheduledModel.find({ name: 'SheduledMessage'})
+        if(result.length == 0){                                 //If no entries are found then log
+            console.log('No scheduled messages exist');
+        } else {                                                //Else then check each message
+            for(let i = 0; i < result.length; i++){
+                if(result[i].date < new Date()){                //Should be be sent yet?
+                    console.log('\nContent: ' + result[i].content + 
+                    '\nScheduled Time: ' + result[i].date + 
+                    '\nCurrent Time: ' + new Date());
+
+                    //get channel, then remove filler characters <, # og >
+                    const channel = await client.channels.fetch(result[i].channelId.replace('<','').replace('#','').replace('>','')); 
+                    channel.send(result[i].content);      
+                    
+                    //Remove the message from the database
+                    await scheduledModel.findOneAndRemove({ _id: result[i]._id });
+                    console.log('Successfully sent and removed the scheduled message');
+                }
+            }
+        }
+    }, 1000 * 60) //Checks the database every 60s
+}

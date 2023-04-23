@@ -1,7 +1,8 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const googleIt = require('google-it')
 const Append = require('../functions/add.js');
-
+const gameListModel = require('../models/game-list-schema');
+const votingPot = require('./votingPot.js');
 
 
 module.exports = {
@@ -17,18 +18,20 @@ module.exports = {
     async execute(interaction)
     {
         const { options } = interaction
-
         const gameName = options.getString('name');
-        const map = new Map();
 
         await googleIt({'only-urls': true, 'limit': 1, 'query':  gameName})
-        .then(results => {
-
-            //json has an array, THEN kvp object T-T
-            let link = results[0].link
-            interaction.reply(gameName + "\n" + link)})
+        .then(async results => {
+            //upload game and link to database
+            await new gameListModel({
+                name: 'votingPot',
+                gameName: gameName,
+                link: results[0].link,
+                guildId: interaction.guildId,
+              }).save()
+            })
         .catch(e => {})
         
-        /*await interaction.reply(gameName + " " +  map.get(gameName))*/
+        await interaction.reply(gameName + " has successfully been added to the voting pot")
     }
 }
