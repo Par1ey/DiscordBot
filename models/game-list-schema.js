@@ -5,16 +5,10 @@ const reqString = {
   required: true,
 }
 
-const votes = {
-    type: Number,
-    required: true
-}
-
 const gameListSchema = new mongoose.Schema({
   name: reqString,
   gameName: reqString,
   link: reqString,
-  votes: votes,
   guildId: reqString,
 }, {collection: 'gameList'});
 

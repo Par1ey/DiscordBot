@@ -30,8 +30,7 @@ module.exports = {
         await new gameListModel({
             name: votingPot,
             gameName: gameName,
-            link: link,
-            votes: 0,                       //set default votes to 0, this gets changed under the voting process
+            link: link,                       //set default votes to 0, this gets changed under the voting process
             guildId: interaction.guildId,
           }).save()
 

@@ -27,7 +27,6 @@ module.exports = {
                 name: 'votingPot',
                 gameName: gameName,
                 link: results[0].link,
-                votes: 0,                       //set default votes to 0, this gets changed under the voting process
                 guildId: interaction.guildId,
               }).save()
             })
