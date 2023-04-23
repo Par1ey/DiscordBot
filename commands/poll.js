@@ -14,6 +14,12 @@ module.exports = {
     )
     .addStringOption((option) =>
        option
+        .setName('question')
+        .setDescription('the question')
+        .setRequired(true)
+    )
+    .addStringOption((option) =>
+       option
         .setName('option')
         .setDescription('The option')
         .setRequired(true),
@@ -38,12 +44,12 @@ module.exports = {
        option
         .setName('option5')
         .setDescription('The option'),
-    )
-    ,
+    ),
 async execute(interaction) {
     const { options } = interaction;
     
     const channel = options.getChannel('channel');
+    const question = options.getString('question');
     const option = options.getString('option');
     const option2 = options.getString('option2');
     const option3 = options.getString('option3');
@@ -53,7 +59,7 @@ async execute(interaction) {
     let counter = new Counter(option, option2, option3, option4, option5);
 
     const embed = new EmbedBuilder()
-        .setTitle('Poll')
+        .setTitle(question)
         .setColor("Gold")
         .setDescription(counter.question())
         .setTimestamp();

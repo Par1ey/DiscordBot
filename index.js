@@ -2,9 +2,12 @@ require('dotenv').config();
 
 const {REST} = require('@discordjs/rest');
 const { Routes } = require('discord-api-types/v9');
-const { Client, Intents, Collection, IntentsBitField, GatewayIntentBits } = require('discord.js');
+const { Client, Collection, Partials, GatewayIntentBits, IntentsBitField, Intents } = require('discord.js');
+const { Guilds, GuildMessages } = GatewayIntentBits;
+const { User, Message, GuildMember, ThreadMember } = Partials;
 const mongoose = require('mongoose')
 const DATABASE = process.env.DATABASE;
+
 
 const fs = require('fs');
 const path = require('path');
@@ -21,12 +24,17 @@ myIntents.add(
 
 
 const client = new Client({
-    intents: myIntents
+    intents: [Guilds, GuildMessages, myIntents],
+    partials: [User, Message, GuildMember, ThreadMember]
 });
+
+const { loadEvents } = require('./Handlers/eventHandler');
 
 // List of all commands
 const commands = [];
 client.commands = new Collection();
+client.events = new Collection();
+loadEvents(client);
 
 const commandsPath = path.join(__dirname, "commands"); // E:\yt\discord bot\js\intro\commands
 const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
