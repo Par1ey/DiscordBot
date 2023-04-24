@@ -1,6 +1,7 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
-const { EmbedBuilder } = require('discord.js');
+const { EmbedBuilder, ReactionCollector, Role } = require('discord.js');
 const gameListModel = require('../models/game-list-schema');
+const scheduledModel = require('../models/scheduled-schema');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -11,6 +12,31 @@ module.exports = {
             .setName('delay')
             .setDescription('Delay between polls in interger seconds')
             .setRequired(true),
+        )
+        .addStringOption((option) =>
+        option
+          .setName('year')
+          .setDescription('Year in the format YYYY'),
+        )
+        .addStringOption((option) =>
+        option
+          .setName('month')
+          .setDescription('Month in the format MM'),
+        )
+        .addStringOption((option) =>
+        option
+          .setName('date')
+          .setDescription('Date in the format DD'),
+        )
+        .addStringOption((option) =>
+        option
+          .setName('hour')
+          .setDescription('Hour in the format of HH, according to 24 hour clock in Central European Summer Time'),
+        )
+        .addStringOption((option) =>
+        option
+          .setName('minute')
+          .setDescription('Minute in the format mm'),
         )
     ,
     async execute(interaction)
@@ -39,6 +65,7 @@ module.exports = {
             var previousMessage = interaction.reply('@everyone the voting process is starting in ' + delay + 's');
 
             let i = 0;
+            var gameNameForPing = ''
             var votes = [];
 
             //makes embed for the game to be voted on
@@ -81,20 +108,49 @@ module.exports = {
                         }
 
                         if(i == votes.length - 1 ){
+                            //Save name for ping
+                            gameNameForPing = winnerCount.gameName;
+                            
                             const embed = new EmbedBuilder()
                                 .setColor("Gold")
                                 .setTitle('The winner of the voting pot is: ' + winnerCount.gameName)
                                 .setDescription('Link to the game: ' + winnerCount.link)
     
-                            interaction.followUp({embeds: [embed] });
+                            previousMessage = interaction.followUp({embeds: [embed] });
                             await gameListModel.deleteMany({ name: 'votingPot'})
                         }
                     })
                 }
 
+                //shedule a @everyone ping
+                if(interaction.options.getString('year') != null){
+                    const dateData = {
+                        guildID: interaction.guildId,
+                        channel: interaction.channel,
+                        message: '@everyone it is time to play ' + gameNameForPing,
+        
+                        year: parseInt(interaction.options.getString('year')),
+                        month: parseInt(interaction.options.getString('month')) - 1,    //Month is for some reason +1 to user input
+                        date: parseInt(interaction.options.getString('date')),
+        
+                        hour: parseInt(interaction.options.getString('hour')),      //Hour is for some reason -2 to user input
+                        minute: parseInt(interaction.options.getString('minute')),
+                        }
+        
+                        const targetDate = new Date(dateData.year, dateData.month, dateData.date, dateData.hour, dateData.minute)
+                        console.log(targetDate);
+        
+                        await new scheduledModel({
+                            name: 'SheduledMessage',
+                            date: targetDate.valueOf(),
+                            content: dateData.message,
+                            guildId: dateData.guildID,
+                            channelId: dateData.channel,
+                          }).save()
+                }
+                
                 
             }, 1000 * delay * (result.length + 1));  //After every poll is done, get the winner
-
         }
             
                

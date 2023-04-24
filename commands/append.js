@@ -3,6 +3,7 @@ const { EmbedBuilder } = require('discord.js');
 const Append = require('../functions/add.js');
 const { map } = require('../functions/add.js');
 const votingPot = require('./votingPot.js');
+const gameListModel = require('../models/game-list-schema');
 
 module.exports = {
     data: new SlashCommandBuilder()
