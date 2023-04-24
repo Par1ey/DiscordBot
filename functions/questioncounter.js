@@ -18,7 +18,6 @@ module.exports = class Counter{
     }
 
     question(){
-        let amount;
         if(this.x != null && this.y == null){
             return this.x;
         } else if(this.x != null && this.y != null && this.z == null){
