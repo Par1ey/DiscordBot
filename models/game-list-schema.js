@@ -18,3 +18,4 @@ module.exports = mongoose.model[name] || mongoose.model(name, gameListSchema, na
 
 const gameListModel = mongoose.model[name] || mongoose.model(name, gameListSchema, name);
 module.exports = gameListModel;
+
