@@ -95,22 +95,24 @@ client.login(process.env.TOKEN);
 
 //Reading for scheduled messages from mongodb
 async function SheduledMessagesCheck(){
-    //Working interval command
-    //setInterval(function () {console.log('Timeout test')}, 1000);
-    setInterval(
-    async () => { 
-        const result = await scheduledModel.find({ name: 'SheduledMessage'})
+    setInterval(async () => { 
+        //Get the messages that are planned
+        const result = await scheduledModel.find({ name: 'SheduledMessage'});
+
         if(result.length == 0){                                 //If no entries are found then log
             console.log('No scheduled messages exist');
         } else {                                                //Else then check each message
             for(let i = 0; i < result.length; i++){
-                if(result[i].date < new Date()){                //Should be be sent yet?
+                if(result[i].date < new Date()){                //Should it be sent yet?
+                    //log the message time, current time and content for diagnostics 
                     console.log('\nContent: ' + result[i].content + 
                     '\nScheduled Time: ' + result[i].date + 
                     '\nCurrent Time: ' + new Date());
 
                     //get channel, then remove filler characters <, # og >
                     const channel = await client.channels.fetch(result[i].channelId.replace('<','').replace('#','').replace('>','')); 
+
+                    //send scheduled message in the specified channel
                     channel.send(result[i].content);      
                     
                     //Remove the message from the database
